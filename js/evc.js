@@ -2,9 +2,13 @@ var evc = {};
 
 evc.ajax = function (url, options) {
     var xhr = evc.createXHR(url, options);
-
-    if (xhr)
-        xhr.send(null);
+    if (xhr) {
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        if (options.method.toUpperCase() === "POST") {
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        }
+        xhr.send(option.data);
+    }
 };
 
 evc.createXHR = function (url, options) {
@@ -17,6 +21,16 @@ evc.createXHR = function (url, options) {
         options = options || {};
         options.method = options.method || "GET";
         options.async = options.async || true;
+        options.data = options.data || null;
+
+        if (options.data) {
+            var qString = [];
+            for (var key in options.data) {
+                qString.push(encodeURIComponent(key) + "=" + encodeURIComponent(option.data[key]));
+            }
+
+            options.data = qString.join("&");
+        }
 
         xhr.onreadystatechange = function () {
             if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 304)) {

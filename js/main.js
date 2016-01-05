@@ -14,4 +14,21 @@
         return false;
     }
 
+    var form = document.getElementsByTagName("form")[0];
+
+    form.onsubmit = function () {
+
+        var url = form.getAttribute("action");
+        var emailVal = form.getElementById("email");
+
+        evc.ajax(url, {
+            method: "POST",
+            data: {
+                email: emailVal
+            }
+        });
+
+        return false;
+    }
+
 })();
